@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=euc-kr" pageEncoding="euc-kr"%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%-- <%
@@ -19,13 +18,14 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
- function fncGetList(currentPage) {
-	//document.getElementById("currentPage").value = currentPage;
-	//document.detailForm.submit();
-	
-	$('#currentPage').val(currentPage)
-	$("form").attr("method","post").attr("action","/product/listProduct/${menu }").submit();
-} 
+	function fncGetList(currentPage) {
+		//document.getElementById("currentPage").value = currentPage;
+		//document.detailForm.submit();
+
+		$('#currentPage').val(currentPage)
+		$("form").attr("method", "post").attr("action",
+				"/product/listProduct/${menu }").submit();
+	}
 	/* function updateQuantity() {
 		var newQuantity = $("#prodQuantityInput").val();
 
@@ -49,17 +49,20 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 			}
 		});
 	} */
-	
- $(function(){
-	 console.log ( $("tr.ct_list_pop td:nth-child(3)" ) );
-	 /*$("tr.ct_list_pop td:nth-child(3)").on("click",function(){
-			 var prodNo = $(this).data('prodNo');
-		    var menu = $(this).data('menu');
-			self.location = "/product/getProduct/${prodNo}/${menu}"; 
-		})*/
-		
-	}); 
-	
+
+	$(function() {
+		//console.log($("tr.ct_list_pop td:nth-child(3)"));
+		var list = JSON.parse("${list}");
+		alert(list);
+		$('tr.ct_list_pop').each(function(index) {
+			$("tr.ct_list_pop:nth-child("+(2*index+4)+") td:nth-child(3)").on("click",function() {
+				var prodNo = $("tr.ct_list_pop:nth-child("+(2*index+4)+") td:nth-child(3) input").val();
+				var menu = "${menu}";
+				//alert(prodNo + "/" + menu);
+				self.location = "/product/getProduct/" + prodNo+ "/" + menu;
+			})
+		})
+	});
 </script>
 
 </head>
@@ -69,7 +72,6 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 
 	<div style="width: 98%; margin-left: 10px;">
 
-		<!-- <form name="detailForm" action="/listProduct.do?menu=<%= request.getParameter("menu") %>" method="post"> -->
 		<!-- <form name="detailForm" action="/product/listProduct/${menu }" method="post"> -->
 		<form name="detailForm">
 
@@ -105,12 +107,10 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 						name="searchOrderBy" class="ct_input_g" style="width: 100px">
 							<option value="0" ${search.searchOrderBy=='0' ? "selected" : "" }>상품번호
 								순</option>
-							<option value="1"
-								${search.searchOrderBy=='1' ? "selected" : "" }>가격 낮은
-								순</option>
-							<option value="2"
-								${search.searchOrderBy=='2'? "selected" : "" }>가격 높은
-								순</option>
+							<option value="1" ${search.searchOrderBy=='1' ? "selected" : "" }>가격
+								낮은 순</option>
+							<option value="2" ${search.searchOrderBy=='2'? "selected" : "" }>가격
+								높은 순</option>
 					</select> <select name="searchCondition" class="ct_input_g"
 						style="width: 80px">
 							<option value="0"
@@ -163,38 +163,16 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 				<tr>
 					<td colspan="11" bgcolor="808285" height="1"></td>
 				</tr>
-				<%-- <%
-				for (int i = 0; i < list.size(); i++) {
-					Product product = (Product) list.get(i);
-				%>
-				<tr class="ct_list_pop">
-					<td align="center"><%=i + 1%></td>
-					<td></td>
-					<td align="left"><a
-						href="/getProduct.do?prodNo=<%=product.getProdNo()%>&menu=<%=request.getParameter("menu")%>"><%=product.getProdName()%></a>
-					</td>
-					<td></td>
-					<td align="left"><%=product.getPrice()%></td>
-					<td></td>
-					<td align="left"><%=product.getRegDate()%></td>
-					<td></td>
-					<td align="left"><%=product.getProTranCode()%></td>
-				</tr>
-				<tr>
-					<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-				</tr>
-				<%
-				}
-				%> --%>
 				<c:set var="i" value="0" />
 				<c:forEach var="product" items="${list}">
 					<c:set var="i" value="${i+1 }" />
-					<tr class="ct_list_pop">
+					<tr class="ct_list_pop" >
 						<td align="center">${i }</td>
 						<td></td>
-						<td align="left"><a
-							href="/product/getProduct/${product.prodNo}/${menu }">${product.prodName }</a>
-							<%--  ${product.prodName } --%> </td>
+						<td align="left" >
+							<input value="${product.prodNo}" type="hidden"/> 
+								${product.prodName }
+						</td>
 						<td></td>
 						<td align="left">${product.price }</td>
 						<td></td>

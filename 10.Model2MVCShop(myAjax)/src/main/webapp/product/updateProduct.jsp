@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=euc-kr" pageEncoding="euc-kr"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%-- <%
 Product productVO = (Product) request.getAttribute("productVO");
 System.out.println("updateProduct.jsp :" +productVO);
@@ -163,20 +163,25 @@ $(function(){
 				<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 			</tr>
 			<tr>
-				<td width="104" class="ct_write"></td>
+				<td width="104" class="ct_write">상품이미지</td>
 				<td bgcolor="D6D6D6" width="1"></td>
-				<td><img src="/images/uploadFiles/${product.fileName}"
-					height="200" align="absmiddle" /></td>
+				<td>
+					<c:forEach var="fileName" items="${product.fileList}">
+						<img src="/images/uploadFiles/${fileName}" height="200"
+						align="absmiddle" /><br/>${fileName}<br/>
+					</c:forEach>
+				</td>
 			</tr>
 			<tr>
 				<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 			</tr>
 			<tr>
-				<td width="104" class="ct_write">상품이미지</td>
+				<td width="104" class="ct_write">상품이미지<br/>파일업로드</td>
 				<td bgcolor="D6D6D6" width="1"></td>
-				<td class="ct_write01"><input type="file" name="imageFileName"
+				<td class="ct_write01"><input type="file" name="imageFileName" multiple
 					class="ct_input_g" style="width: 200px; height: 19px"
-					maxLength="20" value="${product.fileName }" />${product.fileName }</td>
+					maxLength="20" value="${product.fileName }" />
+				</td>
 			</tr>
 			<tr>
 				<td height="1" colspan="3" bgcolor="D6D6D6"></td>

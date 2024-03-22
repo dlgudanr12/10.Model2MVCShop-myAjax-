@@ -25,7 +25,7 @@ import com.model2.mvc.service.user.UserService;
 
 //==> 회원관리 RestController
 @RestController
-@RequestMapping("/rest/user/*")
+@RequestMapping("/user/*")
 public class UserRestController {
 
 	/// Field
@@ -64,17 +64,17 @@ public class UserRestController {
 
 		return userService.getUser(user.getUserId());
 	}
-
-	@RequestMapping(value = "json/getUser/{userId}", method = RequestMethod.GET)
-	public User getUser(@PathVariable String userId) throws Exception {
-
+	
+	@RequestMapping( value="json/getUser/{userId}", method=RequestMethod.GET )
+	public User getUser( @PathVariable String userId ) throws Exception{
+		
 		System.out.println("/user/json/getUser : GET");
-
-		// Business Logic
+		
+		//Business Logic
 		return userService.getUser(userId);
 	}
 
-	@RequestMapping(value = "/json/updateUser/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value = "json/updateUser/{userId}", method = RequestMethod.GET)
 	public Map<String, Object> updateUser(@PathVariable("userId") String userId) throws Exception {
 
 		System.out.println("/user/updateUser : GET");
@@ -87,43 +87,37 @@ public class UserRestController {
 		return map;
 	}
 
-	@RequestMapping(value = "/json/updateUser", method = RequestMethod.POST)
+	@RequestMapping(value = "json/updateUser", method = RequestMethod.POST)
 	public Map<String, Object> updateUser(@RequestBody User user, HttpSession session) throws Exception {
 
 		System.out.println("/user/updateUser : POST");
 		// Business Logic
 		userService.updateUser(user);
-//		System.out.println(user.getAddr());
-		
-//		String sessionId = ((User) session.getAttribute("user")).getUserId();
-//		if (sessionId.equals(user.getUserId())) {
-//			session.setAttribute("user", user);
-//		}
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		System.out.println(userService.getUser(user.getUserId()));
 		map.put("user", userService.getUser(user.getUserId()));
 
-//		return "redirect:/user/getUser?userId="+user.getUserId();
 		return map;
 	}
 
-	@RequestMapping(value = "json/login", method = RequestMethod.POST)
-	public User login(@RequestBody User user, HttpSession session) throws Exception {
-
+	@RequestMapping( value="json/login", method=RequestMethod.POST )
+	public User login(	@RequestBody User user,
+									HttpSession session ) throws Exception{
+	
 		System.out.println("/user/json/login : POST");
-		// Business Logic
-		System.out.println("::" + user);
-		User dbUser = userService.getUser(user.getUserId());
-
-		if (user.getPassword().equals(dbUser.getPassword())) {
+		//Business Logic
+		System.out.println("::"+user);
+		User dbUser=userService.getUser(user.getUserId());
+		
+		if( user.getPassword().equals(dbUser.getPassword())){
 			session.setAttribute("user", dbUser);
 		}
-
+		
 		return dbUser;
 	}
 
-	@RequestMapping(value = "/json/checkDuplication", method = RequestMethod.POST)
+	@RequestMapping(value = "json/checkDuplication", method = RequestMethod.POST)
 	public Map<String, Object> checkDuplication(@RequestBody String userId) throws Exception {
 
 		System.out.println("/user/checkDuplication : POST");
@@ -138,7 +132,7 @@ public class UserRestController {
 		return map;
 	}
 
-	@RequestMapping(value = "/json/listUser")
+	@RequestMapping(value = "json/listUser")
 	public Map<String, Object> listUser(@RequestBody Search search, HttpServletRequest request) throws Exception {
 
 		System.out.println("/user/listUser : GET / POST");

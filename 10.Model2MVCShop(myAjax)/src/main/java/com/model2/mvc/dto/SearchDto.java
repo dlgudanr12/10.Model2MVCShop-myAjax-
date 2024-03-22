@@ -1,9 +1,12 @@
-package com.model2.mvc.common;
+package com.model2.mvc.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.model2.mvc.common.Search;
 
-public class SearchDTO {
+
+public class SearchDto {
 	private Search search;
 	
 	private int currentPage;
@@ -14,13 +17,17 @@ public class SearchDTO {
 	private String searchOrderBy;
 	private int searchPriceLowerLimit;
 	private int searchPriceUpperLimit;
+	private String searchTranCodeOn0;
+	private String searchTranCodeOn1;
+	private String searchTranCodeOn2;
+	private String searchTranCodeOn3;
 	private List<String> searchTranCodeOn;
-	private List<Integer> listTranCode;
 	
 	private String userId;
 	
-	public SearchDTO() {
+	public SearchDto() {
 		search=new Search();
+		searchTranCodeOn=new ArrayList<String>();
 	}
 
 	public Search getSearch() {
@@ -32,8 +39,6 @@ public class SearchDTO {
 		search.setSearchOrderBy(searchOrderBy);
 		search.setSearchPriceLowerLimit(searchPriceLowerLimit);
 		search.setSearchPriceUpperLimit(searchPriceUpperLimit);
-		search.setSearchTranCodeOn(searchTranCodeOn);
-		search.setListTranCode(listTranCode);
 		
 		return search;
 	}
@@ -98,28 +103,36 @@ public class SearchDTO {
 		this.searchPriceUpperLimit = searchPriceUpperLimit;
 	}
 
-	public List<String> getSearchTranCodeOn() {
-		return searchTranCodeOn;
-	}
-
-	public void setSearchTranCodeOn(List<String> searchTranCodeOn) {
-		this.searchTranCodeOn = searchTranCodeOn;
-	}
-
-	public List<Integer> getListTranCode() {
-		return listTranCode;
-	}
-
-	public void setListTranCode(List<Integer> listTranCode) {
-		this.listTranCode = listTranCode;
-	}
-
 	public String getUserId() {
 		return userId;
 	}
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public void setSearchTranCodeOn0(String searchTranCodeOn0) {
+		this.searchTranCodeOn0 = searchTranCodeOn0;
+	}
+
+	public void setSearchTranCodeOn1(String searchTranCodeOn1) {
+		this.searchTranCodeOn1 = searchTranCodeOn1;
+	}
+
+	public void setSearchTranCodeOn2(String searchTranCodeOn2) {
+		this.searchTranCodeOn2 = searchTranCodeOn2;
+	}
+
+	public void setSearchTranCodeOn3(String searchTranCodeOn3) {
+		this.searchTranCodeOn3 = searchTranCodeOn3;
+	}
+
+	public List<String> getSearchTranCodeOn() {
+		searchTranCodeOn.add(searchTranCodeOn0);
+		searchTranCodeOn.add(searchTranCodeOn1);
+		searchTranCodeOn.add(searchTranCodeOn2);
+		searchTranCodeOn.add(searchTranCodeOn3);
+		return searchTranCodeOn;
 	}
 
 }

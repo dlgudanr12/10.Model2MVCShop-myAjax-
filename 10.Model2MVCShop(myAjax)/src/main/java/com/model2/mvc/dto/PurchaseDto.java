@@ -1,8 +1,12 @@
-package com.model2.mvc.service.domain;
+package com.model2.mvc.dto;
 
 import java.sql.Date;
 
-public class PurchaseDTO {
+import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.Purchase;
+import com.model2.mvc.service.domain.User;
+
+public class PurchaseDto {
 	
 	private Purchase purchase;
 	private int tranNo;
@@ -24,7 +28,7 @@ public class PurchaseDTO {
 	private int tranQuantity;
 	
 	
-	public PurchaseDTO() {
+	public PurchaseDto() {
 		purchase=new Purchase();
 		purchaseProd=new Product();
 		buyer=new User();
