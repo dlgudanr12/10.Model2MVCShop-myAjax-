@@ -82,8 +82,9 @@ public class ProductRestController {
 		return map;
 	}
 
-	@RequestMapping(value = "/json/listProduct/{menu}")
-	public Map<String, Object> listProduct(@RequestBody Search search, @PathVariable String menu)
+	@RequestMapping(value = "/json/listProduct")
+	public Map<String, Object> listProduct(
+			@RequestBody Search search)
 			throws Exception {
 
 		System.out.println("\n:: ==> /json/listProduct.GET/POST start......");
@@ -102,8 +103,6 @@ public class ProductRestController {
 
 		map.put("resultPage", resultPage);
 		map.put("search", search);
-
-		map.put("menu", menu);
 
 		System.out.println("/json/listProduct.GET/POST end......\n");
 

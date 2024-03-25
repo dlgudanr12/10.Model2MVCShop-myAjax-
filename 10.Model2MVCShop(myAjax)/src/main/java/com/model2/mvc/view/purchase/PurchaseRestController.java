@@ -169,7 +169,7 @@ public class PurchaseRestController {
 	}
 
 	@RequestMapping(value = "json/updateTranCode/{tranNo}/{tranCode}", method = RequestMethod.GET)
-	public void updateTranCode(@ModelAttribute("purchase") Purchase purchase) throws Exception {
+	public Map<String,Object> updateTranCode(@ModelAttribute("purchase") Purchase purchase) throws Exception {
 		System.out.println("\n:: ==> json/updateTranCode.GET start......");
 
 		if (purchase.getTranNo() != 0 && purchase.getTranCode() != null) {
@@ -178,7 +178,7 @@ public class PurchaseRestController {
 		}
 
 		purchaseService.updateTranCode(purchase);
-
+		Map<String,Object> map=new HashMap<String,Object>();
 //		if (purchase.getTranNo() != 0 && purchase.getTranCode() != null) {
 //			if (purchase.getTranCode().equals("1")) {
 //				modelAndView.setViewName("redirect:/purchase/listDelivery");
@@ -188,8 +188,10 @@ public class PurchaseRestController {
 //				modelAndView.setViewName("redirect:/purchase/listPurchase");
 //			}
 //		}
+		map.put("success", "success");
 
 		System.out.println("json/updateTranCode.GET end......\n");
+		return map;
 	}
 
 	@RequestMapping(value = "json/listDelivery")

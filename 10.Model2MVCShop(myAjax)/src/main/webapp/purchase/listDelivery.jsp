@@ -18,6 +18,31 @@
 		$("form").attr("method","post").attr("action","/purchase/listDelivery").submit();
 
 	}
+	$(function() {
+		$('tr.ct_list_pop').each(function(index) {
+			$("tr.ct_list_pop:nth-child("+(2*index+4)+") td:contains('배송하기') span").mouseenter(function() {
+				$(this).css("color","red");
+			}).mouseleave(function() {
+				$(this).css("color","blue");
+			})
+			$("tr.ct_list_pop:nth-child("+(2*index+4)+") td:contains('배송하기') span").css("color","blue").on("click",function() {
+				var tranNo = $("tr.ct_list_pop:nth-child("+(2*index+4)+") td:nth-child(3)").text().trim();
+				var tranCode = $("tr.ct_list_pop:nth-child("+(2*index+4)+") td:nth-child(15) input").val();
+				alert(tranNo + "/" + tranCode);
+				$.ajax("/purchaseRest/json/updateTranCode/"+ tranNo+ "/"+ tranCode,{
+					method : "GET",
+					dataType : "json",
+					headers : {
+						"Content-Type" : "application/json"
+						},
+						success : function(JSONData, status){
+							//alert(JSONData.success);
+							$("tr.ct_list_pop:nth-child(" + (2 * index + 4) + ") td:nth-child(15)").text("배송 중");
+							}
+						})
+					})
+				})
+			});
 </script>
 
 </head>
@@ -155,11 +180,11 @@
 						<td></td>
 						<td align="left">${purchase.divyDate }</td>
 						<td></td>
-						<td align="left">
+						<td align="left"><input type="hidden" value="${purchase.tranCode }"/>
 								<c:if test="${purchase.tranCode!=null}">
 									<c:if test="${purchase.tranCode=='1' }">구매완료
-										<a
-											href="/purchase/updateTranCode/${purchase.tranNo }/${purchase.tranCode }">배송하기</a>
+										<!--<a href="/purchase/updateTranCode/${purchase.tranNo }/${purchase.tranCode }">배송하기</a>-->
+											<span>배송하기</span>
 									</c:if>
 									<c:if test="${purchase.tranCode=='2' }">배송 중</c:if>
 									<c:if test="${purchase.tranCode=='3' }">배송 완료</c:if>
