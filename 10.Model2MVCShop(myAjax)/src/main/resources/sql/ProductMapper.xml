@@ -68,7 +68,7 @@
 		,prod_quantity
 		FROM product
 		<trim prefix="where" prefixOverrides="AND||OR">
-			<if test="searchCondition != null">
+			<if test=" !(searchCondition==null or searchKeyword==null or searchKeyword =='' )">
 				<bind name="searchKeyword"
 					value="'%'+ _parameter.getSearchKeyword()+'%'" />
 				<if test=" searchCondition == 0 and searchKeyword !='' ">

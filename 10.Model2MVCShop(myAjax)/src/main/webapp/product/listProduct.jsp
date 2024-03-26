@@ -27,7 +27,6 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 	function fncGetList(currentPage) {
 		//document.getElementById("currentPage").value = currentPage;
 		//document.detailForm.submit();
-
 		$('#currentPage').val(currentPage);
 		$("form").attr("method", "post").attr("action",
 				"/product/listProduct/${menu }").submit();
@@ -55,9 +54,7 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 			}
 		});
 	} */
-
-	$(function() {
-		//console.log($("tr.ct_list_pop td:nth-child(3)"));
+	function fncLink() {
 		$('tr.ct_list_pop').each(
 				function(index) {
 					$(
@@ -76,6 +73,10 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 										+ "/" + menu;
 							})
 				})
+	}
+	$(function() {
+		fncLink();
+		//console.log($("tr.ct_list_pop td:nth-child(3)"));
 
 		/* $.ajax("/productRest/json/listProduct",
 				{
@@ -102,100 +103,152 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 		var maxPage = $("input.maxPage").val();
 		var pageSize = $("input.pageSize").val();
 		var currentPage = $("input.currentPage").val();
-		var searchCondition = $("input.searchCondition").val();
-		var searchKeyword = $("input.searchKeyword").val();
-		var searchOrderBy = $("input.searchOrderBy").val();
+		var searchCondition = $("input.searchCondition").val().trim();
+		var searchKeyword = $("input.searchKeyword").val().trim();
+		var searchOrderBy = $("input.searchOrderBy").val().trim();
 		var searchPriceLowerLimit = $("input.searchPriceLowerLimit").val();
 		var searchPriceUpperLimit = $("input.searchPriceUpperLimit").val();
-		console.log("maxPage : " + maxPage
-				+"\n pageSize : " + pageSize
-				+"\n currentPage : " + currentPage
-				+"\n searchCondition : " + searchCondition
-				+"\n searchKeyword : " + searchKeyword
-				+"\n searchOrderBy : " + searchOrderBy
-				+"\n searchPriceLowerLimit : " + searchPriceLowerLimit
-				+"\n searchPriceUpperLimit : " + searchPriceUpperLimit);
-		
+		console.log("maxPage : " + maxPage + "\n pageSize : " + pageSize
+				+ "\n currentPage : " + currentPage + "\n searchCondition : "
+				+ searchCondition + "\n searchKeyword : -" + searchKeyword
+				+ "-" + "\n searchOrderBy : " + searchOrderBy
+				+ "\n searchPriceLowerLimit : " + searchPriceLowerLimit
+				+ "\n searchPriceUpperLimit : " + searchPriceUpperLimit);
+
 		/* $( "tfoot.a:last" ).after( $( "tfoot.a:first" ).clone() ); */
-		var last=$(window).height()-$(window.parent.frames["leftFrame"]).height();
-		console.log($(window.parent).height()+"/"+$(window.parent.frames["rightFrame"]).height()+"/"+$(window.parent.frames["topFrame"]).height()+"/"+$(window.parent.frames["leftFrame"]).height()+"/"+$($(window)) );
-		if(currentPage<=maxPage){
-		$( window ).on( "scroll", function() {
-			
-			if ( $(window).scrollTop() ==  last) {
-				++currentPage
-				console.log(currentPage);
-				//$( "tfoot.a:last" ).after( $( "tfoot.a:first" ).clone() );
-				$.ajax("/productRest/json/listProduct",
-				{
-					method : "POST",
-					dataType : "json",
-					headers : {
-						"Content-Type" : "application/json"
-					},
-					data : JSON.stringify({
-						currentPage : currentPage
-					}),
-					success : function(JSONData, status) {
-						/* console.log(JSONData);
-						var serverData=JSON.stringify(JSONData);
-						console.log(serverData); */
-			            let i=(currentPage-1)*pageSize;
-						 $.each(JSONData.list, function(index, product) {
-					            // 여기서 index는 배열의 인덱스이고, item은 각 요소를 나타냅니다
-					            ++i;
-					            console.log("Index: " + index + ", Item: " + JSON.stringify(product));
-					            var quantityText = "";
-					            if (product.prodQuantity != 0) {
-					            	quantityText = "판매 중";
-					            } else {
-					            	quantityText = "재고 없음";
-					            }
-					            var textPop="<tr class='ct_list_pop'>"
-								+"<td align='center' height='200'>"+i+"</td>"
-								+"<td></td>"
-								+"<td align='left'><input value='"+product.prodNo+"'"
-									+"type='hidden' /> "+product.prodName+"</td>"
-								+"<td></td>"
-								+"<td align='left'>"+product.price+"</td>"
-								+"<td></td>"
-								+"<td align='left'>"+product.regDate+"</td>"
-								+"<td></td>"
-								/* +"<td align='left'><c:if test='"+product.prodQuantity+"!=0'> 판매 중 </c:if>"
-								+"<c:if test='"+product.prodQuantity+"==0'> 재고 없음 </c:if></td>" */
-								+"<td align='left'>"+quantityText+"</td>"
-								+"<td></td>"
-								+"<td align='left'>"+product.prodQuantity+"개</td>"
-							+"</tr>";
-							var textPop2="<tr>"
-								+"<td colspan='11' bgcolor='D6D7D6' height='1'></td>"
-							+"</tr>";
-					            $( "tr.ct_list_pop:last" ).after(textPop).after(textPop2);
-								
-								$('tr.ct_list_pop').each(
-										function(index) {
-											$(
-													"tr.ct_list_pop:nth-child(" + (2 * index + 4)
-															+ ") td:nth-child(3)").on(
-													"click",
-													function() {
-														var prodNo = $(
-																"tr.ct_list_pop:nth-child("
-																		+ (2 * index + 4)
-																		+ ") td:nth-child(3) input")
-																.val();
-														var menu = "${menu}";
-														self.location = "/product/getProduct/" + prodNo
-																+ "/" + menu;
+		var last = $(window).height()
+				- $(window.parent.frames["leftFrame"]).height();
+		console.log($(window.parent).height() + "/"
+				+ $(window.parent.frames["rightFrame"]).height() + "/"
+				+ $(window.parent.frames["topFrame"]).height() + "/"
+				+ $(window.parent.frames["leftFrame"]).height() + "/"
+				+ $($(window)));
+		if (currentPage <= maxPage) {
+			$(window)
+					.on(
+							"scroll",
+							function() {
+
+								if ($(window).scrollTop() == last) {
+									++currentPage
+									console.log(currentPage);
+									//$( "tfoot.a:last" ).after( $( "tfoot.a:first" ).clone() );
+									$
+											.ajax(
+													"/productRest/json/listProduct",
+													{
+														method : "POST",
+														dataType : "json",
+														headers : {
+															"Content-Type" : "application/json"
+														},
+														data : JSON
+																.stringify({
+																	currentPage : currentPage,
+																	searchCondition : searchCondition,
+																	searchKeyword : searchKeyword,
+																	searchOrderBy : searchOrderBy,
+																	searchPriceLowerLimit : searchPriceLowerLimit,
+																	searchPriceUpperLimit : searchPriceUpperLimit
+																}),
+														success : function(
+																JSONData,
+																status) {
+															/* console.log(JSONData);
+															var serverData=JSON.stringify(JSONData);
+															console.log(serverData); */
+															let i = (currentPage - 1)
+																	* pageSize;
+															$
+																	.each(
+																			JSONData.list,
+																			function(
+																					index,
+																					product) {
+																				// 여기서 index는 배열의 인덱스이고, item은 각 요소를 나타냅니다
+																				++i;
+																				console
+																						.log("Index: "
+																								+ index
+																								+ ", Item: "
+																								+ JSON
+																										.stringify(product));
+																				var quantityText = "";
+																				if (product.prodQuantity != 0) {
+																					quantityText = "판매 중";
+																				} else {
+																					quantityText = "재고 없음";
+																				}
+																				var regDate = new Date(
+																						product.regDate);
+																				var formatRegDate=regDate.getFullYear()+"-"+regDate.getMonth().toString().padStart(2, '0')+"-"+regDate.getDate().toString().padStart(2, '0');
+																				var textPop = "<tr class='ct_list_pop'>"
+																						+ "<td align='center' height='200'>"
+																						+ i
+																						+ "</td>"
+																						+ "<td></td>"
+																						+ "<td align='left'><input value='"+product.prodNo+"'"
+									+"type='hidden' /> "
+																						+ product.prodName
+																						+ "</td>"
+																						+ "<td></td>"
+																						+ "<td align='left'>"
+																						+ product.price
+																						+ "</td>"
+																						+ "<td></td>"
+																						+ "<td align='left'>"
+																						+ formatRegDate
+																						+ "</td>"
+																						+ "<td></td>"
+																						+ "<td align='left'>"
+																						+ quantityText
+																						+ "</td>"
+																						+ "<td></td>"
+																						+ "<td align='left'>"
+																						+ product.prodQuantity
+																						+ "개</td>"
+																						+ "</tr>";
+																				var textPop2 = "<tr><td colspan='11' bgcolor='D6D7D6' height='1'></td></tr>";
+																				$(
+																						"tr.ct_list_pop:last")
+																						.after(
+																								textPop)
+																						.after(
+																								textPop2);
+																				fncLink();
+																				/* $(
+																						'tr.ct_list_pop')
+																						.each(
+																								function(
+																										index) {
+																									$(
+																											"tr.ct_list_pop:nth-child("
+																													+ (2 * index + 4)
+																													+ ") td:nth-child(3)")
+																											.on(
+																													"click",
+																													function() {
+																														var prodNo = $(
+																																"tr.ct_list_pop:nth-child("
+																																		+ (2 * index + 4)
+																																		+ ") td:nth-child(3) input")
+																																.val();
+																														var menu = "${menu}";
+																														self.location = "/product/getProduct/"
+																																+ prodNo
+																																+ "/"
+																																+ menu;
+																													})
+																								}) */
+																			});
+														}
 													})
-										})
-						 });
-					}
-				})
-				window.scrollTo(0, last);
-			}	 	 
-			last=$(window).height()-$(window.parent.frames["leftFrame"]).height();
-		})
+									window.scrollTo(0, last);
+								}
+								last = $(window).height()
+										- $(window.parent.frames["leftFrame"])
+												.height();
+							})
 		}
 
 		/*  $( "span" ).css( "display", "inline" ).fadeOut( "slow" ); */
@@ -208,11 +261,16 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 	<input class="maxPage" type="hidden" value=" ${resultPage.maxPage}" />
 	<input class="pageSize" type="hidden" value=" ${resultPage.pageSize}" />
 	<input class="currentPage" type="hidden" value=" ${search.currentPage}" />
-	<input class="searchCondition" type="hidden" value=" ${search.searchCondition}" />
-	<input class="searchKeyword" type="hidden" value=" ${search.searchKeyword}" />
-	<input class="searchOrderBy" type="hidden" value=" ${search.searchOrderBy}" />
-	<input class="searchPriceLowerLimit" type="hidden" value=" ${search.searchPriceLowerLimit}" />
-	<input class="searchPriceUpperLimit" type="hidden" value=" ${search.searchPriceUpperLimit}" />
+	<input class="searchCondition" type="hidden"
+		value=" ${search.searchCondition}" />
+	<input class="searchKeyword" type="hidden"
+		value=" ${search.searchKeyword}" />
+	<input class="searchOrderBy" type="hidden"
+		value=" ${search.searchOrderBy}" />
+	<input class="searchPriceLowerLimit" type="hidden"
+		value=" ${search.searchPriceLowerLimit}" />
+	<input class="searchPriceUpperLimit" type="hidden"
+		value=" ${search.searchPriceUpperLimit}" />
 
 	<div style="width: 98%; margin-left: 10px;">
 
@@ -266,7 +324,6 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 					</select> <input type="text" name="searchKeyword"
 						value="${search.searchKeyword}" class="ct_input_g"
 						style="width: 120px; height: 19px">
-
 					</td>
 
 					<td align="right" width="70">
@@ -284,6 +341,17 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 					</td>
 				</tr>
 			</table>
+
+			<table width="100%" border="0" cellspacing="0" cellpadding="0"
+				style="margin-top: 10px;">
+				<tr>
+					<td align="center"><input type="hidden" id="currentPage"
+						name="currentPage" value="" /> 
+						 <jsp:include page="../common/pageNavigatorDefault.jsp" />
+					</td>
+				</tr>
+			</table>
+			<!--  페이지 Navigator 끝 -->
 
 			<table width="100%" border="0" cellspacing="0" cellpadding="0"
 				style="margin-top: 10px;">
@@ -307,54 +375,30 @@ String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
 				<tr>
 					<td colspan="11" bgcolor="808285" height="1"></td>
 				</tr>
-					<c:set var="i" value="0" />
-					<c:forEach var="product" items="${list}">
-						<c:set var="i" value="${i+1 }" />
-						<tr class="ct_list_pop">
-							<td align="center" height="200">${i }</td>
-							<td></td>
-							<td align="left"><input value="${product.prodNo}"
-								type="hidden" /> ${product.prodName }</td>
-							<td></td>
-							<td align="left">${product.price }</td>
-							<td></td>
-							<td align="left">${product.regDate }</td>
-							<td></td>
-							<td align="left"><c:if test="${ product.prodQuantity!=0}"> 판매 중 </c:if>
-								<c:if test="${ product.prodQuantity==0}"> 재고 없음 </c:if></td>
-							<td></td>
-							<td align="left">${product.prodQuantity}개</td>
-						</tr>
-						<tr>
-							<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-						</tr>
-					</c:forEach>
+				<c:set var="i" value="0" />
+				<c:forEach var="product" items="${list}">
+					<c:set var="i" value="${i+1 }" />
+					<tr class="ct_list_pop">
+						<td align="center" height="200">${i }</td>
+						<td></td>
+						<td align="left"><input value="${product.prodNo}"
+							type="hidden" /> ${product.prodName }</td>
+						<td></td>
+						<td align="left">${product.price }</td>
+						<td></td>
+						<td align="left">${product.regDate }</td>
+						<td></td>
+						<td align="left"><c:if test="${ product.prodQuantity!=0}"> 판매 중 </c:if>
+							<c:if test="${ product.prodQuantity==0}"> 재고 없음 </c:if></td>
+						<td></td>
+						<td align="left">${product.prodQuantity}개</td>
+					</tr>
+					<tr>
+						<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+					</tr>
+				</c:forEach>
 			</table>
-
-			<table width="100%" border="0" cellspacing="0" cellpadding="0"
-				style="margin-top: 10px;">
-				<tr>
-					<td align="center"><input type="hidden" id="currentPage"
-						name="currentPage" value="" /> <%-- <%
- if (resultPage.getCurrentPage() > resultPage.getPageUnit()) {
- %> <a
-						href="javascript:fncGetProductList('<%=resultPage.getCurrentPage() - 1%>')">◀이전</a>
-						<%
-						}
-						for (int i = resultPage.getBeginUnitPage(); i <= resultPage.getEndUnitPage(); i++) {
-						%> <a href="javascript:fncGetProductList('<%=i%>')"><%=i%></a> <%
- }
- if (resultPage.getEndUnitPage() < resultPage.getMaxPage()) {
- %> <a
-						href="javascript:fncGetProductList('<%=resultPage.getEndUnitPage() + 1%>')">이후▶</a>
-						<%
-						}
-						%> --%> <jsp:include page="../common/pageNavigatorDefault.jsp" />
-
-					</td>
-				</tr>
-			</table>
-			<!--  페이지 Navigator 끝 -->
+			
 		</form>
 	</div>
 
